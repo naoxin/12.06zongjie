@@ -18,13 +18,21 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.ehhzmy.hhzmy.R;
+import com.hhzmy.hhzmy.MyActivity;
 import com.hhzmy.hhzmy.ZhuCeActivity;
+import com.hhzmy.util.OkHttp;
 import com.hhzmy.view.Code;
 import com.umeng.socialize.UMAuthListener;
 import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
+
+import okhttp3.Request;
 
 /**
  * Created by liyan on 2016/11/8.
@@ -45,12 +53,16 @@ public class Fragment4 extends Fragment {
     private ImageView sqq;
     private ImageView w;
     private ImageView xin;
+    String path="http://60.205.92.165:8080/userOperAction/logon?";
+    private String url;
+    private String name;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = View.inflate(getActivity(), R.layout.fragment4, null);
         mEtPassword = (EditText) view.findViewById(R.id.edit2);
+
         mBtnPassword = (Button) view.findViewById(R.id.btnPassword);
         mBtnPassword.setOnClickListener(new View.OnClickListener() {
 
@@ -122,8 +134,10 @@ public class Fragment4 extends Fragment {
                     Toast.makeText(getActivity(), "验证码填写不正确", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(getActivity(), "操作成功", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent();
+                    Intent intent = new Intent(getActivity(), MyActivity.class);
+                    startActivity(intent);
                 }
+//                qin();
             }
         });
 
@@ -140,7 +154,7 @@ public class Fragment4 extends Fragment {
             @Override
             public void onClick(View view) {
                 UMShareAPI mShareAPI = UMShareAPI.get(getActivity());
-                mShareAPI.doOauthVerify(getActivity(), SHARE_MEDIA.QQ, umAuthListener);
+                mShareAPI.getPlatformInfo(getActivity(), SHARE_MEDIA.QQ, umAuthListener);
             }
         });
         w = (ImageView) view.findViewById(R.id.wei);
@@ -160,14 +174,43 @@ public class Fragment4 extends Fragment {
             }
         });
         return view;
-
     }
+
+    private void qin() {
+        String ed1 = ed.getText().toString().replaceAll(" ", "").trim();
+        Map<String,String> map=new HashMap<>();
+        OkHttp.postAsync(path+"user_phone="+ed1+"&verify_code"+mEtPassword.getText().toString()+"&type=1", map, new OkHttp.DataCallBack() {
+            @Override
+            public void requestFailure(Request request, IOException e) {
+
+            }
+
+            @Override
+            public void requestSuccess(String result) throws Exception {
+                Toast.makeText(getActivity(),result,Toast.LENGTH_SHORT).show();
+                JSONObject object = new JSONObject(result);
+            String code = object.getString("code");
+            String message_code = object.getString("message_code");
+            Toast.makeText(getActivity(),code,Toast.LENGTH_SHORT).show();
+            if(code.equals("200")){
+                Toast.makeText(getActivity(),"登录成功！",Toast.LENGTH_SHORT).show();
+                getActivity().finish();
+            }else if (code.equals("400")){
+                Toast.makeText(getActivity(),"登录失败！"+message_code,Toast.LENGTH_SHORT).show();
+            }
+        }
+        });
+    }
+
 
     private UMAuthListener umAuthListener = new UMAuthListener() {
         @Override
         public void onComplete(SHARE_MEDIA platform, int action, Map<String, String> data) {
             Toast.makeText(getContext(), "Authorize succeed", Toast.LENGTH_SHORT).show();
-
+            url = data.get("profile_image_url");
+            name = data.get("screen_name");
+            Toast.makeText(getContext(), url+name, Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(getActivity(),MyActivity.class).putExtra("tu",url).putExtra("name",name));
         }
 
         @Override
@@ -180,5 +223,6 @@ public class Fragment4 extends Fragment {
             Toast.makeText(getContext(), "Authorize cancel", Toast.LENGTH_SHORT).show();
         }
     };
+
 
 }

@@ -1,5 +1,6 @@
 package com.hhzmy.hhzmy;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -7,6 +8,7 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -23,6 +25,7 @@ public class ZhuCeActivity extends AppCompatActivity {
     String phonenum = "";
     private EditText phone;
     private CheckBox checkBox;
+    private Button xia;
 
 
     @Override
@@ -34,6 +37,15 @@ public class ZhuCeActivity extends AppCompatActivity {
 
         phone = (EditText) findViewById(R.id.pohne);
         checkBox = (CheckBox) findViewById(R.id.checkbox1);
+        xia =(Button)findViewById(R.id.xiayibu);
+        xia.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(ZhuCeActivity.this,ZhuActivity.class);
+                intent.putExtra("shouji",phone.getText().toString());
+                startActivity(intent);
+            }
+        });
 
     }
     public  void xiayibu(View view) {

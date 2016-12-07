@@ -1,5 +1,6 @@
 package com.hhzmy.hhzmy;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -13,6 +14,7 @@ import com.hhzmy.fragment.Fragment1;
 import com.hhzmy.fragment.Fragment2;
 import com.hhzmy.fragment.Fragment3;
 import com.hhzmy.fragment.Fragment4;
+import com.umeng.socialize.UMShareAPI;
 
 
 public class Main3Activity extends FragmentActivity implements View.OnClickListener {
@@ -116,6 +118,12 @@ public class Main3Activity extends FragmentActivity implements View.OnClickListe
             im3.setImageResource(R.mipmap.tab_shopping_normal);
             im4.setImageResource(R.mipmap.tab_myebuy_pressed);
         }
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
+
     }
 
 }
