@@ -94,12 +94,6 @@
         android:layout_toRightOf="@id/self_suning"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
-    <ImageView
-        android:layout_below="@id/dao"
-        android:layout_alignParentRight="true"
-        android:src="@mipmap/commodity_shear_bg"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
 
 
     <LinearLayout
@@ -185,5 +179,14 @@
             <!--android:layout_height="wrap_content" />-->
 
     </LinearLayout>
+
+    <ImageView
+        android:src="@mipmap/commodity_shear_bg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/dao"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:id="@+id/imageView2" />
 
 </RelativeLayout>

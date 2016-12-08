@@ -12,6 +12,7 @@ import android.widget.Toast;
 import com.cloopen.rest.sdk.CCPRestSmsSDK;
 import com.ehhzmy.hhzmy.R;
 import com.hhzmy.util.OkHttp;
+import com.hhzmy.view.CountDownTimerUtils;
 
 import org.json.JSONObject;
 
@@ -34,17 +35,16 @@ public class ZhuActivity extends AppCompatActivity {
     private Button denglua;
     private String num;
     private TextView cong;
+    private TextView congxin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_zhu);
         Intent intent = getIntent();
         pa = intent.getStringExtra("shouji");
-        setContentView(R.layout.activity_zhu);
         sho = (TextView) findViewById(R.id.jieshoushoujihao);
         sho.setText("短信验证码已发送至" + pa);
-
-
         shoujimima = (EditText) findViewById(R.id.shoujipassword);
         shoujiyan = (EditText) findViewById(R.id.username);
         denglua = (Button) findViewById(R.id.dengluanniu);
@@ -55,21 +55,25 @@ public class ZhuActivity extends AppCompatActivity {
             }
         });
         cong = (TextView) findViewById(R.id.cong);
+        //短信发送加倒计时
         cong.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new Thread(){
-                    @Override
-                    public void run() {
-                        super.run();
-                        getMessageNum();
-                    }
-                }.start();;
+                CountDownTimerUtils mCountDownTimerUtils = new CountDownTimerUtils(cong, 60000, 1000);
+
+                mCountDownTimerUtils.start();
+//                new Thread(){
+//                    @Override
+//                    public void run() {
+//                        super.run();
+//                        getMessageNum();
+//                    }
+//                }.start();;
 
             }
         });
     }
-
+//网络请求注册接口
     public void qing() {
         Map<String, String> map = new HashMap<>();
         OkHttp.postAsync(path + "user_phone=" + pa + "&user_pwd=" + shoujimima.getText().toString() + "&random=" + shoujiyan.getText().toString(), map, new OkHttp.DataCallBack() {
@@ -98,7 +102,7 @@ public class ZhuActivity extends AppCompatActivity {
             }
         });
     }
-
+//手机短信验证码
     private void getMessageNum() {
         HashMap<String, Object> result = null;
 

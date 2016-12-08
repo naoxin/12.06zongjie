@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ehhzmy.hhzmy.R;
+import com.hhzmy.seriver.Seriver;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -43,9 +44,12 @@ public class ZhuCeActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent=new Intent(ZhuCeActivity.this,ZhuActivity.class);
                 intent.putExtra("shouji",phone.getText().toString());
+                Intent intent1=new Intent(ZhuCeActivity.this, Seriver.class);
+                startService(intent1);
                 startActivity(intent);
             }
         });
+
 
     }
     public  void xiayibu(View view) {

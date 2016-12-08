@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.ehhzmy.hhzmy">
 
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
@@ -122,6 +123,15 @@
 
         <activity android:name="com.hhzmy.hhzmy.ZhuActivity" />
         <activity android:name="com.hhzmy.hhzmy.MyActivity"></activity>
+
+        <meta-data
+            android:name="UMENG_APPKEY"
+            android:value="584638081c5dd06ac6001043">
+        </meta-data>
+        <meta-data
+            android:name="UMENG_MESSAGE_SECRET"
+            android:value="63e34366a8ef6bb5957e4a087aed49a6">
+        </meta-data>
     </application>
 
 </manifest>

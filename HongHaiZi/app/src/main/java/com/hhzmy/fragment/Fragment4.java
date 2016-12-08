@@ -46,14 +46,13 @@ public class Fragment4 extends Fragment {
     String getCode = null; //获取验证码的值
     EditText vc_code; //文本框的值
     private ImageView ce;
-
     private Button mBtnPassword;
     private EditText mEtPassword;
     private boolean mbDisplayFlg = false;
     private ImageView sqq;
     private ImageView w;
     private ImageView xin;
-    String path="http://60.205.92.165:8080/userOperAction/logon?";
+    String path = "http://60.205.92.165:8080/userOperAction/logon?";
     private String url;
     private String name;
 
@@ -61,9 +60,20 @@ public class Fragment4 extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = View.inflate(getActivity(), R.layout.fragment4, null);
-        mEtPassword = (EditText) view.findViewById(R.id.edit2);
 
+
+        mEtPassword = (EditText) view.findViewById(R.id.edit2);
+        xin = (ImageView) view.findViewById(R.id.xin);
         mBtnPassword = (Button) view.findViewById(R.id.btnPassword);
+        vc_image = (ImageView) view.findViewById(R.id.vc_image);
+        ed = (EditText) view.findViewById(R.id.edit);
+        vc_shuaixi = (Button) view.findViewById(R.id.vc_shuaixi);
+        ce = (ImageView) view.findViewById(R.id.ce);
+        sqq = (ImageView) view.findViewById(R.id.disanq);
+        w = (ImageView) view.findViewById(R.id.wei);
+        vc_code = (EditText) view.findViewById(R.id.edit3);
+        vc_ok = (Button) view.findViewById(R.id.lu);
+        //密码输入框判断隐藏显示
         mBtnPassword.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -80,9 +90,7 @@ public class Fragment4 extends Fragment {
                 mEtPassword.postInvalidate();
             }
         });
-
-
-        ed = (EditText) view.findViewById(R.id.edit);
+//手机号输入框自带空格
         ed.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -106,15 +114,11 @@ public class Fragment4 extends Fragment {
 
             }
         });
-
-
-        vc_image = (ImageView) view.findViewById(R.id.vc_image);
+ //验证码图片
         vc_image.setImageBitmap(Code.getInstance().getBitmap());
-        vc_code = (EditText) view.findViewById(R.id.edit3);
-
         getCode = Code.getInstance().getCode(); //获取显示的验证码
         Log.e("info", getCode + "----");
-        vc_shuaixi = (Button) view.findViewById(R.id.vc_shuaixi);
+//点击刷新验证码
         vc_shuaixi.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -122,8 +126,7 @@ public class Fragment4 extends Fragment {
                 getCode = Code.getInstance().getCode();
             }
         });
-
-        vc_ok = (Button) view.findViewById(R.id.lu);
+//图片验证码判断
         vc_ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -140,8 +143,7 @@ public class Fragment4 extends Fragment {
 //                qin();
             }
         });
-
-        ce = (ImageView) view.findViewById(R.id.ce);
+//点击跳转注册页面00
         ce.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -149,7 +151,7 @@ public class Fragment4 extends Fragment {
                 getActivity().startActivity(intent);
             }
         });
-        sqq = (ImageView) view.findViewById(R.id.disanq);
+//第三方QQ登录
         sqq.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -157,7 +159,7 @@ public class Fragment4 extends Fragment {
                 mShareAPI.getPlatformInfo(getActivity(), SHARE_MEDIA.QQ, umAuthListener);
             }
         });
-        w = (ImageView) view.findViewById(R.id.wei);
+//第三方微信登录
         w.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -165,7 +167,7 @@ public class Fragment4 extends Fragment {
                 mShareAPI.doOauthVerify(getActivity(), SHARE_MEDIA.WEIXIN, umAuthListener);
             }
         });
-        xin =(ImageView)view.findViewById(R.id.xin);
+//第三方新浪登录
         xin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -176,10 +178,11 @@ public class Fragment4 extends Fragment {
         return view;
     }
 
+//登录接口网络请求
     private void qin() {
         String ed1 = ed.getText().toString().replaceAll(" ", "").trim();
-        Map<String,String> map=new HashMap<>();
-        OkHttp.postAsync(path+"user_phone="+ed1+"&verify_code"+mEtPassword.getText().toString()+"&type=1", map, new OkHttp.DataCallBack() {
+        Map<String, String> map = new HashMap<>();
+        OkHttp.postAsync(path + "user_phone=" + ed1 + "&verify_code" + mEtPassword.getText().toString() + "&type=1", map, new OkHttp.DataCallBack() {
             @Override
             public void requestFailure(Request request, IOException e) {
 
@@ -187,30 +190,31 @@ public class Fragment4 extends Fragment {
 
             @Override
             public void requestSuccess(String result) throws Exception {
-                Toast.makeText(getActivity(),result,Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), result, Toast.LENGTH_SHORT).show();
                 JSONObject object = new JSONObject(result);
-            String code = object.getString("code");
-            String message_code = object.getString("message_code");
-            Toast.makeText(getActivity(),code,Toast.LENGTH_SHORT).show();
-            if(code.equals("200")){
-                Toast.makeText(getActivity(),"登录成功！",Toast.LENGTH_SHORT).show();
-                getActivity().finish();
-            }else if (code.equals("400")){
-                Toast.makeText(getActivity(),"登录失败！"+message_code,Toast.LENGTH_SHORT).show();
+                String code = object.getString("code");
+                String message_code = object.getString("message_code");
+                Toast.makeText(getActivity(), code, Toast.LENGTH_SHORT).show();
+                if (code.equals("200")) {
+                    Toast.makeText(getActivity(), "登录成功！", Toast.LENGTH_SHORT).show();
+                    getActivity().finish();
+                } else if (code.equals("400")) {
+                    Toast.makeText(getActivity(), "登录失败！" + message_code, Toast.LENGTH_SHORT).show();
+                }
             }
-        }
         });
     }
 
-
+//第三方登录调用方法
     private UMAuthListener umAuthListener = new UMAuthListener() {
         @Override
         public void onComplete(SHARE_MEDIA platform, int action, Map<String, String> data) {
             Toast.makeText(getContext(), "Authorize succeed", Toast.LENGTH_SHORT).show();
+            //回传头像名称
             url = data.get("profile_image_url");
             name = data.get("screen_name");
-            Toast.makeText(getContext(), url+name, Toast.LENGTH_SHORT).show();
-            startActivity(new Intent(getActivity(),MyActivity.class).putExtra("tu",url).putExtra("name",name));
+            Toast.makeText(getContext(), url + name, Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(getActivity(), MyActivity.class).putExtra("tu", url).putExtra("name", name));
         }
 
         @Override

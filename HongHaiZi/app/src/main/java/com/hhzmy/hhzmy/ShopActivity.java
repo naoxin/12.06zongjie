@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.ehhzmy.hhzmy.R;
 import com.hhzmy.fragment.ShopFragment1;
 import com.hhzmy.fragment.ShopFragment2;
+import com.umeng.socialize.UMShareAPI;
 
 public class ShopActivity extends FragmentActivity implements View.OnClickListener {
 
@@ -92,5 +93,11 @@ public class ShopActivity extends FragmentActivity implements View.OnClickListen
             shangping.setTextColor(Color.BLACK);
             xiangqing.setTextColor(Color.RED);
         }
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
+
     }
 }

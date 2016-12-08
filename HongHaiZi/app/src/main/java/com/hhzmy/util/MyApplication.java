@@ -29,6 +29,28 @@ public class MyApplication extends Application {
 		super.onCreate();
 		UMShareAPI.get(this);
 		imgto();
+		tui();
+	}
+
+	private void tui() {
+
+//		PushAgent mPushAgent = PushAgent.getInstance(this);
+////注册推送服务，每次调用register方法都会回调该接口
+//		mPushAgent.register(new IUmengRegisterCallback() {
+//
+//			@Override
+//			public void onSuccess(String deviceToken) {
+//				//注册成功会返回device token
+//				Log.e(TAG, "onSuccess+++++++++++++++++++++:  "+deviceToken );
+//			}
+//
+//			@Override
+//			public void onFailure(String s, String s1) {
+//
+//			}
+//		});
+
+
 	}
 
 	private void imgto() {
