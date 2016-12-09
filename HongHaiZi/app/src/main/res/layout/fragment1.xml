@@ -19,11 +19,21 @@
             android:layout_weight="1"
             android:src="@mipmap/icon_scan_top" />
 
-        <EditText
-            android:hint="刘东东"
-            android:layout_weight="8"
+
+        <TextView
+            android:id="@+id/yu"
+            android:layout_margin="10dp"
+            android:text="刘冬冬"
+            android:textSize="20dp"
+            android:layout_weight="6"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
+        <ImageView
+            android:id="@+id/yin"
+            android:layout_margin="5dp"
+            android:src="@mipmap/voice_icon_white"
+            android:layout_width="30dp"
+            android:layout_height="30dp" />
 
 
         <ImageView

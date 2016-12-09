@@ -4,6 +4,8 @@ package com.hhzmy.util;
 import android.app.Application;
 
 import com.ehhzmy.hhzmy.R;
+import com.iflytek.cloud.SpeechConstant;
+import com.iflytek.cloud.SpeechUtility;
 import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiskCache;
 import com.nostra13.universalimageloader.cache.memory.impl.UsingFreqLimitedMemoryCache;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -12,7 +14,10 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.umeng.socialize.PlatformConfig;
 import com.umeng.socialize.UMShareAPI;
 
+import cn.jpush.android.api.JPushInterface;
+
 public class MyApplication extends Application {
+	private static final String TAG = "JPush";
 
 	{
 
@@ -27,6 +32,9 @@ public class MyApplication extends Application {
 	public void onCreate() {
 		// TODO Auto-generated method stub
 		super.onCreate();
+		SpeechUtility.createUtility(getApplicationContext(), SpeechConstant.APPID+"=584a506f ");
+		JPushInterface.setDebugMode(true); 	// 设置开启日志,发布时请关闭日志
+		JPushInterface.init(this);
 		UMShareAPI.get(this);
 		imgto();
 		tui();

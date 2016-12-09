@@ -5,11 +5,14 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ehhzmy.hhzmy.R;
 import com.google.gson.Gson;
@@ -22,9 +25,17 @@ import com.hhzmy.adapter.Pager_ViewPager1;
 import com.hhzmy.bean.Pager_Vp;
 import com.hhzmy.hhzmy.SaoYiSaoActivity;
 import com.hhzmy.hhzmy.ShopActivity;
+import com.hhzmy.util.JsonParser;
 import com.hhzmy.util.OkHttp;
 import com.hhzmy.view.MyGridView;
 import com.hhzmy.view.MyListView;
+import com.iflytek.cloud.ErrorCode;
+import com.iflytek.cloud.InitListener;
+import com.iflytek.cloud.RecognizerResult;
+import com.iflytek.cloud.SpeechConstant;
+import com.iflytek.cloud.SpeechError;
+import com.iflytek.cloud.ui.RecognizerDialog;
+import com.iflytek.cloud.ui.RecognizerDialogListener;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.io.IOException;
@@ -32,6 +43,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import okhttp3.Request;
+
+import static android.content.ContentValues.TAG;
+import static com.umeng.socialize.utils.DeviceConfig.context;
 
 /**
  * Created by liyan on 2016/11/8.
@@ -67,6 +81,9 @@ public class Fragment1 extends Fragment {
     private ImageView sao;
     private MyGridView home_aojiao;
     private MyGridView home_muying;
+    private TextView yu;
+    private ImageView yin;
+    public String text;
 
 
     @Nullable
@@ -184,38 +201,47 @@ public class Fragment1 extends Fragment {
         home_lama = (ImageView) view.findViewById(R.id.home_lama);
         lama = (MyListView) view.findViewById(R.id.hp_home_lama);
         home_gengduo = (ImageView) view.findViewById(R.id.home_gengduo);
+        yu = (TextView) view.findViewById(R.id.yu);
+        yin = (ImageView) view.findViewById(R.id.yin);
+
+        yin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                yuyin();
+            }
+        });
         hor_home_im1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(getActivity(), ShopActivity.class);
+                Intent intent = new Intent(getActivity(), ShopActivity.class);
                 startActivity(intent);
             }
         });
         hor_home_im2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(getActivity(), ShopActivity.class);
+                Intent intent = new Intent(getActivity(), ShopActivity.class);
                 startActivity(intent);
             }
         });
         hor_home_im3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(getActivity(), ShopActivity.class);
+                Intent intent = new Intent(getActivity(), ShopActivity.class);
                 startActivity(intent);
             }
         });
         hor_home_im4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(getActivity(), ShopActivity.class);
+                Intent intent = new Intent(getActivity(), ShopActivity.class);
                 startActivity(intent);
             }
         });
         hor_home_im5.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(getActivity(), ShopActivity.class);
+                Intent intent = new Intent(getActivity(), ShopActivity.class);
                 startActivity(intent);
             }
         });
@@ -228,4 +254,48 @@ public class Fragment1 extends Fragment {
             }
         });
     }
+
+    private void yuyin() {
+        // 1.创建RecognizerDialog对象
+        RecognizerDialog mDialog = new RecognizerDialog(getActivity(), initListener);
+        // 2.设置accent、language等参数
+        mDialog.setParameter(SpeechConstant.LANGUAGE, "zh_cn");
+        mDialog.setParameter(SpeechConstant.ACCENT, "mandarin");
+        // 若要将UI控件用于语义理解，必须添加以下参数设置，设置之后onResult回调返回将是语义理解//结果
+        // mDialog.setParameter("asr_sch", "1");
+        // mDialog.setParameter("nlp_version", "2.0");
+        // 3.设置回调接口
+        mDialog.setListener(mRecognizerDialogListener);
+        // 4.显示dialog，接收语音输入
+        mDialog.show();
+        text = "";
+    }
+    InitListener initListener = new InitListener() {
+
+        @Override
+        public void onInit(int code) {
+            if (code != ErrorCode.SUCCESS) {
+                Toast.makeText(context, "监听器初始化错误，错误代码=" + code,
+                        Toast.LENGTH_SHORT).show();
+            }
+        }
+    };
+
+    RecognizerDialogListener mRecognizerDialogListener = new RecognizerDialogListener() {
+
+        @Override
+        public void onResult(RecognizerResult result, boolean isLast) {
+            String json = result.getResultString();
+            String content = JsonParser.parseIatResult(json);
+            text += content;
+            Log.d(TAG, "###content= " + content);
+            yu.setText(text);
+        }
+
+        @Override
+        public void onError(SpeechError error) {
+            Toast.makeText(getActivity(), error.getErrorDescription(),
+                    Toast.LENGTH_SHORT).show();
+        }
+    };
 }
